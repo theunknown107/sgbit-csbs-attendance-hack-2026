@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Aagaman 2K26 • "Free Attendance" Prank Poster & QR Flyer</title>
 
   <link rel="icon" type="image/png" href="assets/qr_code.png">
@@ -12,8 +12,8 @@
 
   <style>
     :root {
-      --bg-dark: #0a0b10;
-      --bg-card: rgba(18, 20, 29, 0.85);
+      --bg-dark: #07080b;
+      --bg-card: rgba(15, 18, 28, 0.82);
       --border-subtle: rgba(255, 255, 255, 0.1);
       --crimson-primary: #e11d48;
       --gold-primary: #fbbf24;
@@ -33,67 +33,89 @@
       background-color: var(--bg-dark);
       color: var(--text-main);
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1.25rem 4rem;
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.15) 0%, transparent 60%),
-        radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+      justify-content: center;
+      padding: 2rem 1.15rem;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    .poster-page-header {
+    /* Dynamic Fluid Canvas */
+    #lava-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(60px);
+      -webkit-filter: blur(60px);
+      opacity: 0.85;
+    }
+
+    .poster-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
       text-align: center;
-      max-width: 680px;
-      margin-bottom: 2rem;
     }
 
     .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
+      display: inline-block;
       padding: 0.35rem 0.85rem;
       background: rgba(225, 29, 72, 0.15);
       border: 1px solid rgba(225, 29, 72, 0.3);
       border-radius: 9999px;
       color: #fb7185;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
     }
 
     .page-title {
       font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-size: clamp(1.75rem, 5vw, 2.4rem);
       font-weight: 900;
       letter-spacing: -0.02em;
       line-height: 1.15;
-      margin-bottom: 0.65rem;
+      margin-bottom: 0.4rem;
       background: linear-gradient(135deg, #ffffff 40%, #fbbf24 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .page-desc {
-      font-size: 0.95rem;
+      font-size: 0.85rem;
       color: var(--text-muted);
-      line-height: 1.5;
+      line-height: 1.45;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
     .poster-preview-card {
       background: var(--bg-card);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--border-subtle);
       border-radius: 20px;
-      padding: 1.5rem;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      padding: 1.25rem;
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7);
+      width: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      max-width: 520px;
-      width: 100%;
+      gap: 1.25rem;
     }
 
     .poster-frame {
@@ -101,7 +123,6 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
-      position: relative;
     }
 
     .poster-img {
@@ -114,14 +135,14 @@
       width: 100%;
       background: rgba(0, 0, 0, 0.4);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 0.5rem;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
     }
 
     .url-text {
@@ -134,20 +155,20 @@
     .btn-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
+      gap: 0.6rem;
       width: 100%;
     }
 
     .btn-action {
       padding: 0.85rem 1rem;
       border-radius: 12px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       text-decoration: none;
       transition: all 0.2s ease;
       border: none;
@@ -172,16 +193,13 @@
     }
 
     .back-nav {
-      margin-top: 2rem;
+      margin-top: 0.5rem;
     }
 
     .btn-back {
       color: var(--text-muted);
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
       transition: color 0.2s ease;
     }
 
@@ -189,26 +207,20 @@
       color: #fff;
     }
 
-    /* Print Specific Styling: Prints just the poster cleanly */
     @media print {
       body {
         background: #fff !important;
         padding: 0 !important;
-        margin: 0 !important;
       }
-      .poster-page-header, .btn-grid, .url-tag-box, .back-nav {
+      #lava-canvas, .badge-pill, .page-title, .page-desc, .btn-grid, .url-tag-box, .back-nav {
         display: none !important;
       }
-      .poster-preview-card {
+      .poster-container, .poster-preview-card {
+        padding: 0 !important;
         border: none !important;
         box-shadow: none !important;
-        padding: 0 !important;
         max-width: 100% !important;
         width: 100% !important;
-      }
-      .poster-frame {
-        box-shadow: none !important;
-        border-radius: 0 !important;
       }
       .poster-img {
         width: 100vw !important;
@@ -218,50 +230,97 @@
   </style>
 </head>
 <body>
+  <canvas id="lava-canvas"></canvas>
 
-  <header class="poster-page-header">
-    <div class="badge-pill">
-      <span>🎯</span>
-      <span>Official Prank Flyer Asset</span>
-    </div>
-    <h1 class="page-title">Scan For Free Attendance</h1>
-    <p class="page-desc">
-      Print this flyer and place it on college notice boards, classroom doors, or share on WhatsApp stories. When students scan the QR code, it opens our portal!
-    </p>
-  </header>
-
-  <main class="poster-preview-card">
-    <div class="poster-frame">
-      <img src="assets/poster_free_attendance.png" alt="Scan For Free Attendance QR Poster" class="poster-img" id="poster-target-img">
+  <div class="poster-container">
+    <div>
+      <div class="badge-pill">OFFICIAL PRANK FLYER ASSET</div>
+      <h1 class="page-title">Scan For Free Attendance</h1>
+      <p class="page-desc">
+        Print or display this flyer. When scanned, it leads to the attendance check-in page.
+      </p>
     </div>
 
-    <div class="url-tag-box">
-      <span>🔗 Target:</span>
-      <span class="url-text">https://theunknown107.github.io/aagaman-2026/</span>
+    <div class="poster-preview-card">
+      <div class="poster-frame">
+        <img src="assets/poster_free_attendance.png" alt="Scan For Free Attendance QR Poster" class="poster-img">
+      </div>
+
+      <div class="url-tag-box">
+        <span>Target:</span>
+        <span class="url-text">https://theunknown107.github.io/aagaman-2026/</span>
+      </div>
+
+      <div class="btn-grid">
+        <a href="assets/poster_free_attendance.png" download="Scan_For_Free_Attendance_Poster.png" class="btn-action primary">
+          <span>Download Print Poster (PNG)</span>
+        </a>
+        <a href="assets/poster_free_attendance.jpg" download="Scan_For_Free_Attendance_Poster.jpg" class="btn-action secondary">
+          <span>Download JPG</span>
+        </a>
+        <button onclick="window.print()" class="btn-action secondary">
+          <span>Print (Ctrl+P)</span>
+        </button>
+      </div>
     </div>
 
-    <div class="btn-grid">
-      <a href="assets/poster_free_attendance.png" download="Scan_For_Free_Attendance_Poster.png" class="btn-action primary">
-        <span>📥</span>
-        <span>Download High-Res Print Poster (PNG)</span>
+    <div class="back-nav">
+      <a href="index.html" class="btn-back">
+        ← Back to Portal
       </a>
-      <a href="assets/poster_free_attendance.jpg" download="Scan_For_Free_Attendance_Poster.jpg" class="btn-action secondary">
-        <span>🖼️</span>
-        <span>Download JPG</span>
-      </a>
-      <button onclick="window.print()" class="btn-action secondary">
-        <span>🖨️</span>
-        <span>Print Flyer (Ctrl+P)</span>
-      </a>
     </div>
-  </main>
+  </div>
 
-  <nav class="back-nav">
-    <a href="index.html" class="btn-back">
-      <span>←</span>
-      <span>Back to Attendance Check-In & Reveal Portal</span>
-    </a>
-  </nav>
+  <script>
+    // Fluid Lava Background
+    const canvas = document.getElementById('lava-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
 
+      const colors = [
+        { r: 225, g: 29, b: 72, a: 0.55 },
+        { r: 245, g: 158, b: 11, a: 0.45 },
+        { r: 159, g: 18, b: 57, a: 0.50 }
+      ];
+
+      const blobs = colors.map((c, i) => ({
+        phaseX: i * 2,
+        phaseY: i * 3,
+        speedX: 0.0008,
+        speedY: 0.0006,
+        radius: Math.min(w, h) * 0.45,
+        color: c
+      }));
+
+      function draw() {
+        ctx.fillStyle = '#07080b';
+        ctx.fillRect(0, 0, w, h);
+
+        blobs.forEach(b => {
+          b.phaseX += b.speedX;
+          b.phaseY += b.speedY;
+          const x = (Math.sin(b.phaseX) * 0.5 + 0.5) * w;
+          const y = (Math.cos(b.phaseY) * 0.5 + 0.5) * h;
+          const rad = b.radius * (1 + 0.15 * Math.sin(b.phaseX * 2));
+          const grad = ctx.createRadialGradient(x, y, 0, x, y, rad);
+          grad.addColorStop(0, `rgba(${b.color.r}, ${b.color.g}, ${b.color.b}, ${b.color.a})`);
+          grad.addColorStop(1, 'rgba(7, 8, 11, 0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.arc(x, y, rad, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+  </script>
 </body>
 </html>
