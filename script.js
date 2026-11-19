@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initBlobs() {
-      // Colors reflecting Aagaman's red silk, gold disco, and dark luxury aesthetic
       const colors = [
         { r: 225, g: 29, b: 72, a: 0.55 },  // Crimson Primary
         { r: 245, g: 158, b: 11, a: 0.45 }, // Champagne Gold
@@ -44,8 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
           x: Math.random() * window.innerWidth,
           y: Math.random() * window.innerHeight,
           radius: Math.min(window.innerWidth, window.innerHeight) * (0.35 + Math.random() * 0.25),
-          vx: (Math.random() - 0.5) * 0.8,
-          vy: (Math.random() - 0.5) * 0.8,
           phaseX: Math.random() * Math.PI * 2,
           phaseY: Math.random() * Math.PI * 2,
           speedX: 0.0008 + Math.random() * 0.001,
@@ -66,15 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fillRect(0, 0, w, h);
 
       // Render undulating fluid blobs with radial gradients
-      this.blobs.forEach((b, index) => {
-        // Smooth organic Lissajous movement
+      this.blobs.forEach((b) => {
         b.phaseX += b.speedX;
         b.phaseY += b.speedY;
 
         const posX = (Math.sin(b.phaseX) * 0.5 + 0.5) * w;
         const posY = (Math.cos(b.phaseY) * 0.5 + 0.5) * h;
-
-        // Radius pulsing
         const currentRadius = b.radius * (1 + 0.15 * Math.sin(b.phaseX * 2));
 
         const grad = ctx.createRadialGradient(posX, posY, 0, posX, posY, currentRadius);
@@ -97,78 +91,117 @@ document.addEventListener('DOMContentLoaded', () => {
   new FluidLavaLamp('lava-canvas');
 
   // ==========================================================================
-  // 2. AUDIO SYNTHESIZER (ZERO-DEPENDENCY)
+  // 2. BACKGROUND THEME SONG (PLAYS 0:11 TO 1:00 THEN LOOPS)
   // ==========================================================================
-  class SoundEngine {
-    constructor() {
-      this.enabled = true;
-      this.ctx = null;
-    }
+  const bgMusic = document.getElementById('bg-theme-music') || new Audio('assets/aagaman_theme.mp3');
+  bgMusic.preload = 'auto';
 
-    init() {
-      if (!this.ctx) {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        if (AudioCtx) {
-          this.ctx = new AudioCtx();
-        }
+  let isMuted = false;
+  let musicStarted = false;
+
+  const muteToggleBtn = document.getElementById('mute-toggle-btn');
+  const muteIcon = document.getElementById('mute-icon');
+  const muteLabel = document.getElementById('mute-label');
+
+  function updateMuteButtonUI() {
+    if (!muteToggleBtn) return;
+    if (isMuted) {
+      muteToggleBtn.classList.remove('is-playing');
+      muteToggleBtn.classList.add('is-muted');
+      if (muteLabel) muteLabel.textContent = 'Muted';
+      if (muteIcon) {
+        muteIcon.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          </svg>
+        `;
       }
-      if (this.ctx && this.ctx.state === 'suspended') {
-        this.ctx.resume();
+    } else {
+      muteToggleBtn.classList.remove('is-muted');
+      if (musicStarted && !bgMusic.paused) {
+        muteToggleBtn.classList.add('is-playing');
+      }
+      if (muteLabel) muteLabel.textContent = 'Audio On';
+      if (muteIcon) {
+        muteIcon.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        `;
       }
     }
+  }
 
-    toggle() {
-      this.enabled = !this.enabled;
-      return this.enabled;
-    }
+  if (muteToggleBtn) {
+    muteToggleBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      bgMusic.muted = isMuted;
+      updateMuteButtonUI();
 
-    playVerifyBeep() {
-      if (!this.enabled) return;
-      this.init();
-      if (!this.ctx) return;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(520, this.ctx.currentTime);
-      osc.frequency.setValueAtTime(650, this.ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.16);
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.16);
-    }
+      if (!isMuted && musicStarted && bgMusic.paused) {
+        bgMusic.play().catch(e => console.log('Playback error:', e));
+      }
+      showToast(isMuted ? 'Audio muted' : 'Audio unmuted');
+    });
+  }
 
-    playCelebrationFanfare() {
-      if (!this.enabled) return;
-      this.init();
-      if (!this.ctx) return;
+  function startPosterSong() {
+    musicStarted = true;
+    bgMusic.currentTime = 11.0;
+    bgMusic.muted = isMuted;
 
-      const notes = [
-        { freq: 261.63, time: 0, dur: 0.15 },
-        { freq: 329.63, time: 0.12, dur: 0.15 },
-        { freq: 392.00, time: 0.24, dur: 0.18 },
-        { freq: 523.25, time: 0.38, dur: 0.6 },
-        { freq: 659.25, time: 0.50, dur: 0.5 },
-        { freq: 783.99, time: 0.62, dur: 0.7 }
-      ];
-
-      notes.forEach(n => {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(n.freq, this.ctx.currentTime + n.time);
-        gain.gain.setValueAtTime(0.15, this.ctx.currentTime + n.time);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + n.time + n.dur);
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-        osc.start(this.ctx.currentTime + n.time);
-        osc.stop(this.ctx.currentTime + n.time + n.dur);
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        updateMuteButtonUI();
+      }).catch(err => {
+        console.warn('Autoplay waiting for user interaction:', err);
       });
     }
   }
 
-  const sound = new SoundEngine();
+  // Exact Loop from 1:00 (60.0s) back to 0:11 (11.0s)
+  bgMusic.addEventListener('timeupdate', () => {
+    if (bgMusic.currentTime >= 60.0) {
+      bgMusic.currentTime = 11.0;
+      if (!isMuted && !bgMusic.paused) {
+        bgMusic.play().catch(e => {});
+      }
+    }
+  });
+
+  // Secondary interval safeguard for seamless loop
+  setInterval(() => {
+    if (musicStarted && bgMusic.currentTime >= 60.0) {
+      bgMusic.currentTime = 11.0;
+      if (!isMuted && !bgMusic.paused) {
+        bgMusic.play().catch(e => {});
+      }
+    }
+  }, 250);
+
+  // Beep sound during verification
+  function playVerifyBeep() {
+    if (isMuted) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(520, ctx.currentTime);
+      osc.frequency.setValueAtTime(650, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.16);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.16);
+    } catch (e) {}
+  }
 
   // ==========================================================================
   // 3. CONFETTI PARTICLE SYSTEM
@@ -270,7 +303,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressStepText = document.getElementById('progress-step-text');
   const progressBarFill = document.getElementById('progress-bar-fill');
 
-  const audioToggleBtn = document.getElementById('audio-toggle-btn');
   const toastNotice = document.getElementById('toast-notice');
   const toastMessage = document.getElementById('toast-message');
 
@@ -295,15 +327,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Audio Toggle
-  if (audioToggleBtn) {
-    audioToggleBtn.addEventListener('click', () => {
-      const isEnabled = sound.toggle();
-      audioToggleBtn.style.opacity = isEnabled ? '1' : '0.4';
-      showToast(isEnabled ? 'Sound enabled' : 'Sound muted');
-    });
-  }
-
   // --- Form Submit & Prank Drop ---
   if (attendanceForm) {
     attendanceForm.addEventListener('submit', (e) => {
@@ -317,8 +340,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      sound.init();
-      sound.playVerifyBeep();
+      // Prime audio element on user gesture
+      try {
+        bgMusic.load();
+      } catch (e) {}
+
+      playVerifyBeep();
 
       // Show Progress Modal
       submitBtn.classList.add('loading');
@@ -334,7 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         progressStepText.textContent = `Applying session waiver to ${usn}...`;
         progressBarFill.style.width = '80%';
-        sound.playVerifyBeep();
+        playVerifyBeep();
       }, 700);
 
       setTimeout(() => {
@@ -342,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBarFill.style.width = '100%';
       }, 1050);
 
-      // The Drop
+      // --- THE DROP & POSTER POP-UP ---
       setTimeout(() => {
         progressModal.classList.remove('show');
         submitBtn.classList.remove('loading');
@@ -352,10 +379,12 @@ document.addEventListener('DOMContentLoaded', () => {
         portalView.classList.add('hidden');
         revealView.classList.add('active');
 
-        // Confetti & Celebration
+        // Confetti Burst
         confetti.explode(160);
         setTimeout(() => confetti.explode(100), 400);
-        sound.playCelebrationFanfare();
+
+        // PLAY THE SONG FROM 0:11 TO 1:00 THEN LOOP
+        startPosterSong();
 
         // Smooth scroll to top of reveal
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -369,6 +398,13 @@ document.addEventListener('DOMContentLoaded', () => {
       revealView.classList.remove('active');
       portalView.classList.remove('hidden');
       attendanceForm.reset();
+
+      // Pause audio on reset
+      bgMusic.pause();
+      bgMusic.currentTime = 11.0;
+      musicStarted = false;
+      updateMuteButtonUI();
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }

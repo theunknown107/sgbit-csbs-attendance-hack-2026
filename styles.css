@@ -128,32 +128,98 @@ body::after {
   min-height: 100dvh;
 }
 
-/* Floating Audio Toggle (Discreet, Top-Right) */
-.floating-audio-btn {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
+/* ==========================================================================
+   HEADER WITH MUTE OPTION
+   ========================================================================== */
+.app-header {
+  position: sticky;
+  top: 0;
   z-index: 100;
+  width: 100%;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(7, 8, 11, 0.72);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 0.65rem 1.25rem;
+  transition: all 0.3s ease;
+}
+
+.header-inner {
+  max-width: 540px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.header-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px;
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-college {
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--text-main);
+  line-height: 1.15;
+}
+
+.header-dept {
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  letter-spacing: 0.03em;
+}
+
+.header-mute-pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(18, 22, 34, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  gap: 0.45rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border-subtle);
-  color: var(--text-muted);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s var(--ease-smooth);
 }
 
-.floating-audio-btn:hover {
+.header-mute-pill:hover {
   background: rgba(255, 255, 255, 0.12);
-  color: #fff;
   border-color: rgba(255, 255, 255, 0.25);
-  transform: scale(1.05);
+  transform: translateY(-1px);
+}
+
+.header-mute-pill.is-playing {
+  border-color: var(--gold-primary);
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--gold-primary);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+}
+
+.header-mute-pill.is-muted {
+  opacity: 0.55;
+  color: var(--text-muted);
 }
 
 /* View Sections */
