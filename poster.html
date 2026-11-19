@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aagaman 2K26 • "Free Attendance" Prank Poster & QR Flyer</title>
+
+  <link rel="icon" type="image/png" href="assets/qr_code.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Cabinet+Grotesk:wght@800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0b10;
+      --bg-card: rgba(18, 20, 29, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --crimson-primary: #e11d48;
+      --gold-primary: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1.25rem 4rem;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(225, 29, 72, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
+    }
+
+    .poster-page-header {
+      text-align: center;
+      max-width: 680px;
+      margin-bottom: 2rem;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.85rem;
+      background: rgba(225, 29, 72, 0.15);
+      border: 1px solid rgba(225, 29, 72, 0.3);
+      border-radius: 9999px;
+      color: #fb7185;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 0.65rem;
+      background: linear-gradient(135deg, #ffffff 40%, #fbbf24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .page-desc {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .poster-preview-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 1.5rem;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .poster-frame {
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .poster-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .url-tag-box {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+    }
+
+    .url-text {
+      color: var(--gold-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      width: 100%;
+    }
+
+    .btn-action {
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: none;
+    }
+
+    .btn-action.primary {
+      background: linear-gradient(135deg, #e11d48, #be123c);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(225, 29, 72, 0.35);
+      grid-column: span 2;
+    }
+
+    .btn-action.secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    .back-nav {
+      margin-top: 2rem;
+    }
+
+    .btn-back {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s ease;
+    }
+
+    .btn-back:hover {
+      color: #fff;
+    }
+
+    /* Print Specific Styling: Prints just the poster cleanly */
+    @media print {
+      body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .poster-page-header, .btn-grid, .url-tag-box, .back-nav {
+        display: none !important;
+      }
+      .poster-preview-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      .poster-frame {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+      }
+      .poster-img {
+        width: 100vw !important;
+        height: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="poster-page-header">
+    <div class="badge-pill">
+      <span>🎯</span>
+      <span>Official Prank Flyer Asset</span>
+    </div>
+    <h1 class="page-title">Scan For Free Attendance</h1>
+    <p class="page-desc">
+      Print this flyer and place it on college notice boards, classroom doors, or share on WhatsApp stories. When students scan the QR code, it opens our portal!
+    </p>
+  </header>
+
+  <main class="poster-preview-card">
+    <div class="poster-frame">
+      <img src="assets/poster_free_attendance.png" alt="Scan For Free Attendance QR Poster" class="poster-img" id="poster-target-img">
+    </div>
+
+    <div class="url-tag-box">
+      <span>🔗 Target:</span>
+      <span class="url-text">https://theunknown107.github.io/aagaman-2026/</span>
+    </div>
+
+    <div class="btn-grid">
+      <a href="assets/poster_free_attendance.png" download="Scan_For_Free_Attendance_Poster.png" class="btn-action primary">
+        <span>📥</span>
+        <span>Download High-Res Print Poster (PNG)</span>
+      </a>
+      <a href="assets/poster_free_attendance.jpg" download="Scan_For_Free_Attendance_Poster.jpg" class="btn-action secondary">
+        <span>🖼️</span>
+        <span>Download JPG</span>
+      </a>
+      <button onclick="window.print()" class="btn-action secondary">
+        <span>🖨️</span>
+        <span>Print Flyer (Ctrl+P)</span>
+      </a>
+    </div>
+  </main>
+
+  <nav class="back-nav">
+    <a href="index.html" class="btn-back">
+      <span>←</span>
+      <span>Back to Attendance Check-In & Reveal Portal</span>
+    </a>
+  </nav>
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VTU Academic Portal • Student Attendance Check-In | SGBIT</title>
+  
+  <!-- Open Graph / Meta for WhatsApp & Social Sharing -->
+  <meta property="og:title" content="VTU Academic Attendance Verification Portal">
+  <meta property="og:description" content="Official student attendance credit session check-in. Enter your USN and name to claim today's attendance.">
+  <meta property="og:image" content="assets/poster_free_attendance.jpg">
+  <meta property="og:type" content="website">
+  
+  <link rel="icon" type="image/png" href="assets/qr_code.png">
+
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@700;800;900&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Institutional Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand-wrapper">
+        <div class="brand-emblem">SG</div>
+        <div class="brand-titles">
+          <span class="brand-college">S.G. Balekundri Inst. of Technology</span>
+          <span class="brand-dept">Department of CSBS</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>Node Active</span>
+        </div>
+        <button id="audio-toggle-btn" class="btn-icon-pill" title="Toggle Sound">
+          <span id="audio-icon">🔊</span>
+          <span id="audio-text">Audio On</span>
+        </button>
+        <a href="poster.html" class="btn-icon-pill" title="View Printable Poster">
+          <span>📄</span>
+          <span>Flyer</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <!-- ==========================================
+         PORTAL VIEW: THE ATTENDANCE CHECK-IN BAIT
+         ========================================== -->
+    <section id="portal-view" class="portal-view">
+      <div class="portal-card">
+        <div class="portal-header">
+          <div class="portal-pill-tag">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            VTU ACADEMIC REGISTRY
+          </div>
+          <h1 class="portal-title">Student Attendance Check-In</h1>
+          <p class="portal-subtitle">
+            Free Attendance Credit Portal. Enter your university credentials below to record your session credit for today's lecture.
+          </p>
+        </div>
+
+        <form id="attendance-form" class="attendance-form" novalidate>
+          <!-- USN Input -->
+          <div class="form-group">
+            <label class="form-label" for="student-usn">
+              <span>University Seat Number (USN)</span>
+              <span class="label-required">*Required</span>
+            </label>
+            <div class="input-container">
+              <span class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="3"/><line x1="7" y1="8" x2="17" y2="8"/><line x1="7" y1="12" x2="13" y2="12"/><circle cx="16" cy="14" r="1.5"/></svg>
+              </span>
+              <input 
+                type="text" 
+                id="student-usn" 
+                name="usn" 
+                class="form-input font-mono" 
+                placeholder="e.g. 2KA24CB042" 
+                maxlength="10"
+                required
+                autocomplete="off"
+                spellcheck="false"
+              >
+            </div>
+            <span class="input-hint">Format: 2KA[YY][DEPT][ROLL] — Verified against university records</span>
+          </div>
+
+          <!-- Student Name Input -->
+          <div class="form-group">
+            <label class="form-label" for="student-name">
+              <span>Student Full Name</span>
+              <span class="label-required">*Required</span>
+            </label>
+            <div class="input-container">
+              <span class="input-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </span>
+              <input 
+                type="text" 
+                id="student-name" 
+                name="name" 
+                class="form-input" 
+                placeholder="e.g. Rahul Patil" 
+                required
+                autocomplete="name"
+              >
+            </div>
+          </div>
+
+          <!-- Division Input -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Class Division</span>
+              <span class="label-required">*Required</span>
+            </label>
+            <div class="division-options">
+              <label>
+                <input type="radio" name="division" value="A" class="division-radio" checked>
+                <span class="division-chip">Div A</span>
+              </label>
+              <label>
+                <input type="radio" name="division" value="B" class="division-radio">
+                <span class="division-chip">Div B</span>
+              </label>
+              <label>
+                <input type="radio" name="division" value="C" class="division-radio">
+                <span class="division-chip">Div C</span>
+              </label>
+              <label>
+                <input type="radio" name="division" value="D" class="division-radio">
+                <span class="division-chip">Div D</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Verification Checkbox -->
+          <label class="checkbox-group">
+            <input type="checkbox" id="verify-consent" class="checkbox-input" checked required>
+            <span class="checkbox-custom">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span class="checkbox-label-text">
+              I certify this is my registered USN and request 100% attendance credit for this session.
+            </span>
+          </label>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submit-btn" class="btn-submit">
+            <span class="loader-spinner"></span>
+            <span id="btn-text">Claim Free Attendance</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </form>
+
+        <div class="security-footer">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>End-to-End Encrypted VTU Academic Ledger • IP & Device Session Logged</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         REVEAL VIEW: THE AAGAMAN 2K26 EVENT PARTY
+         ========================================== -->
+    <section id="reveal-view" class="reveal-view">
+      <div class="reveal-container">
+        
+        <!-- Prank Alert Banner -->
+        <div class="prank-alert-banner">
+          <div class="prank-tag">
+            <span>🎉</span>
+            <span>PRANK UNLOCKED • ATTENDANCE IS TEMPORARY, FRESHERS IS FOREVER</span>
+          </div>
+          <h2 class="prank-punchline">
+            WAIT... DID YOU ACTUALLY THINK ATTENDANCE WAS FREE?! 😂💀
+          </h2>
+          <p class="prank-subtext">
+            There's no free attendance here... <strong>BUT YOU JUST UNLOCKED VIP ACCESS</strong> to the most anticipated night of 2026!
+          </p>
+        </div>
+
+        <!-- Showcase Grid -->
+        <div class="showcase-grid">
+          
+          <!-- Column 1: The Official Poster with 3D Tilt -->
+          <div class="poster-showcase-column">
+            <div class="poster-3d-wrapper" id="poster-tilt-container">
+              <div class="poster-card" id="poster-card-element" title="Click to view full poster">
+                <img src="assets/poster_aagaman.jpg" alt="Aagaman 2K26 Fresher's Party Poster" class="poster-img" id="poster-image">
+                <div class="poster-glare" id="poster-glare"></div>
+              </div>
+            </div>
+            <span class="poster-hint">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              Move mouse or tilt phone for 3D depth • Click image to zoom
+            </span>
+          </div>
+
+          <!-- Column 2: The Personalized VIP Ticket -->
+          <div class="ticket-column">
+            <div class="ticket-card" id="ticket-pass-element">
+              <div class="ticket-top">
+                <div class="ticket-brand">
+                  <span class="ticket-event-label">SGBIT • DEPT OF CSBS PRESENTS</span>
+                  <span class="ticket-event-title">AAGAMAN 2K26</span>
+                </div>
+                <div class="ticket-badge">VIP FRESHER PASS</div>
+              </div>
+
+              <div class="ticket-details-grid">
+                <div class="ticket-info-item">
+                  <span class="ticket-info-label">Guest / Student</span>
+                  <span class="ticket-info-value gold" id="ticket-name-val">Salman Kadalgi</span>
+                </div>
+                <div class="ticket-info-item">
+                  <span class="ticket-info-label">USN</span>
+                  <span class="ticket-info-value" id="ticket-usn-val">2KA24CB042</span>
+                </div>
+                <div class="ticket-info-item">
+                  <span class="ticket-info-label">Division</span>
+                  <span class="ticket-info-value" id="ticket-div-val">Section A</span>
+                </div>
+                <div class="ticket-info-item">
+                  <span class="ticket-info-label">Date</span>
+                  <span class="ticket-info-value gold">30th November 2026</span>
+                </div>
+              </div>
+
+              <div class="ticket-barcode-section">
+                <div class="ticket-barcode-visual"></div>
+                <div class="ticket-serial" id="ticket-serial-val">CSBS-AAG-2026-7819</div>
+              </div>
+            </div>
+
+            <!-- Action Buttons for the Ticket -->
+            <div class="ticket-actions-group">
+              <button id="btn-download-pass" class="btn-ticket-download">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span>Download My VIP Entry Pass</span>
+              </button>
+
+              <div class="ticket-sub-actions">
+                <a href="assets/poster_aagaman.jpg" download="Aagaman_2k26_Poster.jpg" class="btn-secondary-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>Save Poster</span>
+                </a>
+                <a href="poster.html" class="btn-secondary-action">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                  <span>Print Flyer</span>
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Live Event Countdown to November 30, 2026 -->
+        <div class="countdown-section">
+          <div class="countdown-heading">⏳ COUNTDOWN TO AAGAMAN 2K26</div>
+          <div class="countdown-timer">
+            <div class="countdown-box">
+              <span class="countdown-num" id="count-days">00</span>
+              <span class="countdown-unit">Days</span>
+            </div>
+            <span class="countdown-divider">:</span>
+            <div class="countdown-box">
+              <span class="countdown-num" id="count-hours">00</span>
+              <span class="countdown-unit">Hours</span>
+            </div>
+            <span class="countdown-divider">:</span>
+            <div class="countdown-box">
+              <span class="countdown-num" id="count-mins">00</span>
+              <span class="countdown-unit">Mins</span>
+            </div>
+            <span class="countdown-divider">:</span>
+            <div class="countdown-box">
+              <span class="countdown-num" id="count-secs">00</span>
+              <span class="countdown-unit">Secs</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Event Highlights Grid -->
+        <div class="event-info-grid">
+          <div class="info-card">
+            <div class="info-icon-box">🏛️</div>
+            <div class="info-content">
+              <span class="info-title">Venue</span>
+              <span class="info-desc">Divine Allama Sabhamantap Auditorium</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon-box">📅</div>
+            <div class="info-content">
+              <span class="info-title">Date & Schedule</span>
+              <span class="info-desc">30th November 2026 • Grand Evening</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon-box">🎓</div>
+            <div class="info-content">
+              <span class="info-title">Organized By</span>
+              <span class="info-desc">Dept. of CSBS, SGBIT Belagavi</span>
+            </div>
+          </div>
+          <div class="info-card">
+            <div class="info-icon-box">✨</div>
+            <div class="info-content">
+              <span class="info-title">Dress Code</span>
+              <span class="info-desc">Glamorous Red, Black & Gold Luxury</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Prank Your Friends Card -->
+        <div class="prank-share-card">
+          <div class="share-text-box">
+            <h3>Send this to your college group chat! 🤫</h3>
+            <p>Catch your friends falling for the "Free Attendance" trap before they realize what hit them.</p>
+          </div>
+          <div class="share-btns">
+            <button id="btn-share-whatsapp" class="btn-share whatsapp">
+              <span>💬</span>
+              <span>WhatsApp Prank</span>
+            </button>
+            <button id="btn-copy-link" class="btn-share copy">
+              <span>📋</span>
+              <span>Copy Link</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Reset Button -->
+        <div class="reset-row">
+          <button id="btn-reset-form" class="btn-link-reset">
+            ← Check-In Another Student / Reset Portal
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Fake Verification Loading Progress Modal -->
+  <div id="progress-modal" class="verification-progress-modal">
+    <div class="progress-box">
+      <div class="progress-icon">
+        <span class="progress-pulse-ring"></span>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3 class="progress-title">Verifying Student Credentials</h3>
+      <div id="progress-step-text" class="progress-step">Connecting to VTU Attendance Server...</div>
+      <div class="progress-bar-track">
+        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+      </div>
+      <p style="font-size: 0.72rem; color: #64748b;">Please wait while the server logs your biometric presence.</p>
+    </div>
+  </div>
+
+  <!-- Fullscreen Poster Lightbox -->
+  <div id="lightbox-modal" class="lightbox-modal">
+    <button id="lightbox-close-btn" class="lightbox-close">&times;</button>
+    <img src="assets/poster_aagaman.jpg" alt="Aagaman 2K26 Poster Large" class="lightbox-img">
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast-notice" class="toast-notice">
+    <span id="toast-icon">✨</span>
+    <span id="toast-message">Link copied to clipboard!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>
+      © 2026 S.G. Balekundri Institute of Technology • Department of Computer Science & Business Systems (CSBS).
+    </p>
+    <p style="margin-top: 0.35rem;">
+      <a href="poster.html" class="footer-link">Download Attendance QR Flyer</a> • Aagaman 2K26 Fresher's Celebration.
+    </p>
+  </footer>
+
+  <!-- Hidden Canvas for VIP Pass Image Generation -->
+  <canvas id="ticket-canvas" style="display: none;"></canvas>
+
+  <script src="script.js"></script>
+</body>
+</html>
