@@ -189,7 +189,7 @@ body::after {
 }
 
 .header-mute-pill {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 0.45rem;
   padding: 0.38rem 0.85rem;
@@ -202,6 +202,22 @@ body::after {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s var(--ease-smooth);
+}
+
+.header-mute-pill.show {
+  display: inline-flex;
+  animation: fadeInScale 0.35s var(--ease-spring) forwards;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .header-mute-pill:hover {

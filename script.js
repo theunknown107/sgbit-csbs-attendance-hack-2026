@@ -380,6 +380,11 @@ document.addEventListener('DOMContentLoaded', () => {
         portalView.classList.add('hidden');
         revealView.classList.add('active');
 
+        // Reveal the audio mute/unmute button only now that details are submitted and poster appears
+        if (muteToggleBtn) {
+          muteToggleBtn.classList.add('show');
+        }
+
         // Confetti Burst
         confetti.explode(160);
         setTimeout(() => confetti.explode(100), 400);
@@ -400,7 +405,10 @@ document.addEventListener('DOMContentLoaded', () => {
       portalView.classList.remove('hidden');
       attendanceForm.reset();
 
-      // Pause audio on reset
+      // Pause audio and hide mute button on reset
+      if (muteToggleBtn) {
+        muteToggleBtn.classList.remove('show');
+      }
       bgMusic.pause();
       bgMusic.currentTime = 11.0;
       musicStarted = false;
