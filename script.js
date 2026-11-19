@@ -521,13 +521,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2800);
   }
 
-  // Countdown to November 30, 2026
+  // Countdown to Aagaman 2K26 (November 30, 2026 - 5:30 PM)
   function updateCountdown() {
-    const targetDate = new Date('2026-11-30T17:30:00').getTime();
-    const now = new Date().getTime();
-    const diff = targetDate - now;
+    const now = new Date();
+    const targetYear = now.getFullYear();
+    // Month 10 = November in JS Date (0-indexed)
+    let target = new Date(targetYear, 10, 30, 17, 30, 0);
 
-    if (diff <= 0) {
+    let diff = target.getTime() - now.getTime();
+
+    // If past November 30 for the current cycle, roll to the next
+    if (diff < 0) {
+      target = new Date(targetYear + 1, 10, 30, 17, 30, 0);
+      diff = target.getTime() - now.getTime();
+    }
+
+    if (diff <= 0 || isNaN(diff)) {
       if (countDays) countDays.textContent = '00';
       if (countHours) countHours.textContent = '00';
       if (countMins) countMins.textContent = '00';
