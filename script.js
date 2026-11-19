@@ -308,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const posterCard = document.getElementById('poster-card-element');
   const posterTiltContainer = document.getElementById('poster-tilt-container');
+  const posterHolo = document.getElementById('poster-holo');
   const posterGlare = document.getElementById('poster-glare');
   const lightboxModal = document.getElementById('lightbox-modal');
   const lightboxCloseBtn = document.getElementById('lightbox-close-btn');
@@ -409,7 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3D Perspective Tilt on Hero Poster
+  // 3D Perspective Holographic Tilt on Hero Poster (Desktop & Mobile)
   if (posterTiltContainer && posterCard) {
     const handleMove = (x, y, rect) => {
       const centerX = rect.left + rect.width / 2;
@@ -417,24 +418,54 @@ document.addEventListener('DOMContentLoaded', () => {
       const deltaX = (x - centerX) / (rect.width / 2);
       const deltaY = (y - centerY) / (rect.height / 2);
 
-      const rotateY = deltaX * 12;
-      const rotateX = -deltaY * 12;
+      const rotateY = deltaX * 14;
+      const rotateX = -deltaY * 14;
 
-      posterCard.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+      posterCard.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
+      posterCard.classList.add('is-active');
+
+      const glareX = ((x - rect.left) / rect.width) * 100;
+      const glareY = ((y - rect.top) / rect.height) * 100;
 
       if (posterGlare) {
-        const glareX = ((x - rect.left) / rect.width) * 100;
-        const glareY = ((y - rect.top) / rect.height) * 100;
-        posterGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.28) 0%, transparent 60%)`;
+        posterGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.32) 0%, transparent 60%)`;
+      }
+
+      if (posterHolo) {
+        posterHolo.style.backgroundPosition = `${glareX}% ${glareY}%`;
       }
     };
 
+    // Desktop Mouse Events
     posterTiltContainer.addEventListener('mousemove', (e) => {
       const rect = posterTiltContainer.getBoundingClientRect();
       handleMove(e.clientX, e.clientY, rect);
     });
 
     posterTiltContainer.addEventListener('mouseleave', () => {
+      posterCard.classList.remove('is-active');
+      posterCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+    });
+
+    // Mobile Touch Events (Drag & Holo Interactive)
+    posterTiltContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = posterTiltContainer.getBoundingClientRect();
+        handleMove(touch.clientX, touch.clientY, rect);
+      }
+    }, { passive: true });
+
+    posterTiltContainer.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        const rect = posterTiltContainer.getBoundingClientRect();
+        handleMove(touch.clientX, touch.clientY, rect);
+      }
+    }, { passive: true });
+
+    posterTiltContainer.addEventListener('touchend', () => {
+      posterCard.classList.remove('is-active');
       posterCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
     });
 
@@ -442,9 +473,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', (e) => {
         if (e.gamma !== null && e.beta !== null) {
-          const rotY = Math.min(Math.max(e.gamma / 3, -14), 14);
-          const rotX = Math.min(Math.max((e.beta - 45) / 3, -14), 14);
+          const rotY = Math.min(Math.max(e.gamma / 2.5, -16), 16);
+          const rotX = Math.min(Math.max((e.beta - 45) / 2.5, -16), 16);
           posterCard.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
+          posterCard.classList.add('is-active');
+
+          const holoX = 50 + (rotY / 16) * 40;
+          const holoY = 50 + (rotX / 16) * 40;
+          if (posterHolo) {
+            posterHolo.style.backgroundPosition = `${holoX}% ${holoY}%`;
+          }
         }
       });
     }
