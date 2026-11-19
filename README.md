@@ -2,8 +2,8 @@
 
 An ultra-fluid, modern, non-AI-slop web experience designed for the **Department of Computer Science & Business Systems (CSBS)** at **S.G. Balekundri Institute of Technology (SGBIT)**.
 
-🔗 **Live Portal:** [https://theunknown107.github.io/aagaman-2026/](https://theunknown107.github.io/aagaman-2026/)  
-📄 **Printable QR Flyer:** [https://theunknown107.github.io/aagaman-2026/poster.html](https://theunknown107.github.io/aagaman-2026/poster.html)
+🔗 **Live Portal:** [https://theunknown107.github.io/sgbit-csbs-attendance-hack-2026/](https://theunknown107.github.io/sgbit-csbs-attendance-hack-2026/)  
+📄 **Printable QR Flyer:** [https://theunknown107.github.io/sgbit-csbs-attendance-hack-2026/poster.html](https://theunknown107.github.io/sgbit-csbs-attendance-hack-2026/poster.html)
 
 ---
 
