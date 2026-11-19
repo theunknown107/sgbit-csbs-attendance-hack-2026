@@ -714,13 +714,13 @@ body::after {
    ========================================================================== */
 .countdown-section {
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   background: var(--bg-card);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 1.25rem;
   text-align: center;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
 }
@@ -729,47 +729,56 @@ body::after {
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
 }
 
 .countdown-timer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(0.5rem, 3vw, 1.25rem);
+  gap: clamp(0.35rem, 2vw, 0.75rem);
 }
 
 .countdown-box {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  min-width: clamp(60px, 18vw, 84px);
+  padding: 0.65rem 0.4rem;
 }
 
 .countdown-num {
-  font-family: var(--font-display);
-  font-size: clamp(1.85rem, 7vw, 2.5rem);
-  font-weight: 900;
+  font-family: var(--font-sans);
+  font-size: clamp(1.6rem, 4vw, 2.3rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
   color: var(--gold-primary);
-  line-height: 1;
-  text-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+  line-height: 1.1;
+  text-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
 }
 
 .countdown-unit {
   font-size: 0.65rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--text-dim);
-  letter-spacing: 0.05em;
-  margin-top: 0.35rem;
+  letter-spacing: 0.08em;
+  margin-top: 0.25rem;
 }
 
 .countdown-divider {
-  font-size: 1.75rem;
-  font-weight: 300;
+  font-size: 1.5rem;
+  font-weight: 700;
   color: rgba(255, 255, 255, 0.2);
-  margin-top: -0.75rem;
+  margin-top: -0.85rem;
+  user-select: none;
 }
 
 /* Reset / Register Another Button */
@@ -789,6 +798,34 @@ body::after {
 
 .btn-link-reset:hover {
   color: var(--text-main);
+}
+
+/* Discreet Credit Bottom Right */
+.developer-credit-wrapper {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.developer-credit {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: rgba(255, 255, 255, 0.35);
+  padding: 0.3rem 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-full);
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.developer-credit:hover {
+  color: var(--gold-primary);
+  border-color: rgba(251, 191, 36, 0.25);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* Lightbox Modal */
