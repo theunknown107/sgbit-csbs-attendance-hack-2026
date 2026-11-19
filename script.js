@@ -410,25 +410,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 3D Perspective Holographic Tilt on Hero Poster (Desktop & Mobile)
+  // 3D Perspective Holographic Tilt on Hero Poster (Desktop Mouse & Mobile Touch Swipe Only - No Gyro)
   if (posterTiltContainer && posterCard) {
+    let hasDragged = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
     const handleMove = (x, y, rect) => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const deltaX = (x - centerX) / (rect.width / 2);
       const deltaY = (y - centerY) / (rect.height / 2);
 
-      const rotateY = deltaX * 14;
-      const rotateX = -deltaY * 14;
+      const clampedX = Math.max(-1.25, Math.min(1.25, deltaX));
+      const clampedY = Math.max(-1.25, Math.min(1.25, deltaY));
+
+      const rotateY = clampedX * 15;
+      const rotateX = -clampedY * 15;
 
       posterCard.style.transform = `rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
       posterCard.classList.add('is-active');
 
-      const glareX = ((x - rect.left) / rect.width) * 100;
-      const glareY = ((y - rect.top) / rect.height) * 100;
+      const glareX = Math.max(0, Math.min(100, ((x - rect.left) / rect.width) * 100));
+      const glareY = Math.max(0, Math.min(100, ((y - rect.top) / rect.height) * 100));
 
       if (posterGlare) {
-        posterGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.32) 0%, transparent 60%)`;
+        posterGlare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.36) 0%, transparent 65%)`;
       }
 
       if (posterHolo) {
@@ -447,10 +454,13 @@ document.addEventListener('DOMContentLoaded', () => {
       posterCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
     });
 
-    // Mobile Touch Events (Drag & Holo Interactive)
+    // Mobile Finger Touch & Swipe Sensitive Only (No Gyroscope)
     posterTiltContainer.addEventListener('touchstart', (e) => {
       if (e.touches.length > 0) {
+        hasDragged = false;
         const touch = e.touches[0];
+        touchStartX = touch.clientX;
+        touchStartY = touch.clientY;
         const rect = posterTiltContainer.getBoundingClientRect();
         handleMove(touch.clientX, touch.clientY, rect);
       }
@@ -459,38 +469,34 @@ document.addEventListener('DOMContentLoaded', () => {
     posterTiltContainer.addEventListener('touchmove', (e) => {
       if (e.touches.length > 0) {
         const touch = e.touches[0];
+        const dist = Math.hypot(touch.clientX - touchStartX, touch.clientY - touchStartY);
+        if (dist > 5) {
+          hasDragged = true;
+        }
+        if (e.cancelable) {
+          e.preventDefault(); // Prevents page scrolling while swiping on the poster
+        }
         const rect = posterTiltContainer.getBoundingClientRect();
         handleMove(touch.clientX, touch.clientY, rect);
       }
-    }, { passive: true });
+    }, { passive: false });
 
-    posterTiltContainer.addEventListener('touchend', () => {
+    const resetPosterState = () => {
       posterCard.classList.remove('is-active');
       posterCard.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    });
+      setTimeout(() => {
+        hasDragged = false;
+      }, 150);
+    };
 
-    // Mobile Gyroscope Tilt
-    if (window.DeviceOrientationEvent) {
-      window.addEventListener('deviceorientation', (e) => {
-        if (e.gamma !== null && e.beta !== null) {
-          const rotY = Math.min(Math.max(e.gamma / 2.5, -16), 16);
-          const rotX = Math.min(Math.max((e.beta - 45) / 2.5, -16), 16);
-          posterCard.style.transform = `rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg)`;
-          posterCard.classList.add('is-active');
-
-          const holoX = 50 + (rotY / 16) * 40;
-          const holoY = 50 + (rotX / 16) * 40;
-          if (posterHolo) {
-            posterHolo.style.backgroundPosition = `${holoX}% ${holoY}%`;
-          }
-        }
-      });
-    }
+    posterTiltContainer.addEventListener('touchend', resetPosterState);
+    posterTiltContainer.addEventListener('touchcancel', resetPosterState);
   }
 
-  // Lightbox Zoom
+  // Lightbox Zoom (opens on tap, ignores finger swipe)
   if (posterCard && lightboxModal) {
     posterCard.addEventListener('click', () => {
+      if (hasDragged) return;
       lightboxModal.classList.add('show');
     });
 
