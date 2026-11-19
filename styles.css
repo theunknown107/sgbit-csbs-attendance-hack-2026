@@ -213,6 +213,27 @@ body::after {
   margin-bottom: 1.75rem;
 }
 
+.portal-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.portal-college-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 3px;
+  transition: transform 0.25s var(--ease-spring);
+}
+
+.portal-college-logo:hover {
+  transform: scale(1.06);
+}
+
 .portal-pill-tag {
   display: inline-flex;
   align-items: center;
